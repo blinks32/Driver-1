@@ -3,14 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  firebase: {
-    apiKey: 'AIzaSyAM7UJdVZo95dz00IKQz_p0uI8Bse5KnZ8',
-    authDomain: 'reboot-22979.firebaseapp.com',
-    projectId: 'reboot-22979',
-    storageBucket: 'reboot-22979.appspot.com',
-    messagingSenderId: '1033966813085',
-    appId: '',
-  },
+    firebase: {
+        apiKey: 'AIzaSyBkTdGfmj3LAKMmIssUMStIm4WoAb9bWHI',
+        authDomain: 'go-technologies-84545.firebaseapp.com',
+        projectId: 'go-technologies-84545',
+        storageBucket: 'go-technologies-84545.appspot.com',
+        messagingSenderId: '57521838388',
+        appId: "1:57521838388:web:f2ad277d45a98c9c1f6d61"
+      },
   production: true,
   apiKey: "AIzaSyAeMk4MVpph70vAAWkIwNebjUXbLq-S9pI",
   CountryJson: [
