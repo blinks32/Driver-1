@@ -49,8 +49,8 @@ export class LoginPage implements OnInit {
       GoogleAuth.initialize();
      }
     let country = 'Nigeria'
-     this.CountryCode = '+234'
-     this.numberT = '+234'
+     this.CountryCode = '+1'
+     this.numberT = '+1'
   }
 
   async HideSplash()
