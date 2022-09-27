@@ -7,7 +7,12 @@ import { AvatarService } from 'src/app/services/avatar.service';
 import { OverlayService } from 'src/app/services/overlay.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-
+import {
+  getDownloadURL,
+  ref,
+  Storage,
+  uploadString,
+} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-details',
@@ -18,6 +23,7 @@ export class DetailsPage implements OnInit {
 
   form: FormGroup;
   coordinates: any;
+  
   approve2: boolean;
   selected: any = 'Select Car Type';
   cartypes: import("@angular/fire/firestore").DocumentData[];
@@ -27,7 +33,7 @@ export class DetailsPage implements OnInit {
   licenseImage: any;
   profileImage: any;
   constructor(
-    private overlay: OverlayService, private authy: Auth, private auth: AuthService, private avatar: AvatarService, private router: Router
+    private overlay: OverlayService, private storage: Storage, private authy: Auth, private auth: AuthService, private avatar: AvatarService, private router: Router
   ) { }
 
   ngOnInit() {
@@ -63,15 +69,27 @@ export class DetailsPage implements OnInit {
   }
 
   async changeImage() {
+   
     try{
     const image = await Camera.getPhoto({
-      quality: 20,
+      quality: 15,
       allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera, // Camera, Photos or Prompt!
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos, // Camera, Photos or Prompt!
     });
-    this.imageURl = image.dataUrl
-    this.profileImage = image.dataUrl
+    this.authy.onAuthStateChanged(async (user)=>{
+      if (user){
+        const storageRef = ref(this.storage, user.uid);
+        this.overlay.showLoader('Uploading...')
+    await uploadString(storageRef, image.base64String, 'base64');
+
+    const imageUrl = await getDownloadURL(storageRef);
+    this.overlay.hideLoader();
+    
+    this.imageURl = imageUrl
+    this.profileImage = imageUrl
+      }
+    })
 
   }catch(e){
     this.overlay.showAlert('Error', e)
@@ -81,20 +99,28 @@ export class DetailsPage implements OnInit {
   async changeLicense() {
     try{
     const image = await Camera.getPhoto({
-      quality: 20,
+      quality: 15,
       allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera, // Camera, Photos or Prompt!
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos, // Camera, Photos or Prompt!
     });
-    this.licenseURl = image.dataUrl
-    this.licenseImage = image.dataUrl;
+
+    this.authy.onAuthStateChanged(async (user)=>{
+      if (user){
+        const storageRef = ref(this.storage, user.uid);
+        this.overlay.showLoader('Uploading...')
+    await uploadString(storageRef, image.base64String, 'base64');
+    this.overlay.hideLoader();
+    const imageUrl = await getDownloadURL(storageRef);
+    
+    this.licenseURl = imageUrl
+    this.licenseImage = imageUrl
+      }
+    })
   }catch(e){
     this.overlay.showAlert('Error', e)
   }
   }
-
-
-
 
   async signIn() {
     try {

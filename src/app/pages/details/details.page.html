@@ -130,11 +130,11 @@
             <div slot="end" class="preview">
 
               <ion-avatar (click)="changeLicense()">
-                <img *ngIf="licenseImage; else placeholder_avatar;" [src]="licenseImage" />
+                <img *ngIf="licenseImage; else placehol_avatar;" [src]="licenseImage" />
           
-                <ng-template #placeholder_avatar>
+                <ng-template #placehol_avatar>
                   <div class="fallback">
-                    <p>License</p>
+                    License Picture
                   </div>
                 </ng-template>
               </ion-avatar>

@@ -308,6 +308,27 @@ export class AvatarService {
       return null;
     }
   }
+
+
+  async uploadLicense(cameraFile: Photo, uid) {
+   
+    const storageRef = ref(this.storage, this.pathM);
+
+    try {
+      await uploadString(storageRef, cameraFile.base64String, 'base64');
+
+      const imageUrl = await getDownloadURL(storageRef);
+
+      const userDocRef = doc(this.firestore, `Drivers/${uid}`);
+      await setDoc(userDocRef, {
+        imageUrl,
+      });
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+ 
  
    getMessage() {
     const userDocRef = collection(this.firestore, `Messages/${this.auth.currentUser.uid}/messages`);
